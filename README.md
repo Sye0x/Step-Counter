@@ -1,16 +1,44 @@
-# step_counter
+# Offline Step Counter App
 
-A new Flutter project.
+A simple offline step counter built with Flutter. It tracks daily steps and displays progress using a chart similar to the GitHub Contributions Chart. Data is stored locally and synced with Firebase when online.
+
+## Features
+
+- 📉 Step tracking (offline support)
+- 📊 Visual daily progress chart
+- 🔄 Local data sync with Firebase
+- ☁️ Cloud backup & multi-device access
+
+## Tech Stack
+
+- **Flutter** – Cross-platform UI
+- **Firebase** – Cloud storage & sync
+- **SQFLite / Hive** – Local storage (optional)
+- **Sensors / pedometer** – Step tracking
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Clone the repo:
 
-A few resources to get you started if this is your first Flutter project:
+   ```bash
+   git clone https://github.com/your-username/step-counter-app.git
+   cd step-counter-app
+   ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+2. Install dependencies:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+   ```bash
+   flutter pub get
+   ```
+
+3. Run the app:
+
+   ```bash
+   flutter run
+   ```
+
+> Make sure to set up Firebase for your Flutter project (Android & iOS). Refer to the [Firebase setup docs](https://firebase.google.com/docs/flutter/setup) for guidance.
+
+## Screenshots
+
+*Coming soon*
