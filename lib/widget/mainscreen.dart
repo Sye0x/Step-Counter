@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:step_counter/widget/pages/signup/signup.dart';
+import 'package:step_counter/widget/pages/login/login.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -11,6 +12,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreen extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Signup());
+    return Scaffold(body: login());
   }
 }

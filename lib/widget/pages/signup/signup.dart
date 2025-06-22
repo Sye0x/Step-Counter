@@ -99,6 +99,44 @@ class Signup extends StatelessWidget {
     );
   }
 
+  Widget formFields() {
+    return Column(
+      children: [
+        CustomTextField(hint: "Full Name"),
+        SizedBox(height: 15.h),
+        CustomTextField(hint: "Username"),
+        SizedBox(height: 15.h),
+        CustomTextField(hint: "Email"),
+        SizedBox(height: 15.h),
+        CustomTextField(hint: "Password", isPassword: true),
+        SizedBox(height: 15.h),
+        CustomTextField(hint: "Confirm Password", isPassword: true),
+        SizedBox(height: 25.h),
+        SizedBox(
+          width: double.infinity,
+          height: 60.h,
+          child: ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+            ),
+            child: Text(
+              "Sign Up",
+              style: TextStyle(
+                fontSize: 25.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,48 +148,18 @@ class Signup extends StatelessWidget {
               children: [
                 header(context),
                 SizedBox(height: 15.h),
-                CustomTextField(hint: "Full Name"),
-                SizedBox(height: 15.h),
-                CustomTextField(hint: "Username"),
-                SizedBox(height: 15.h),
-                CustomTextField(hint: "Email"),
-                SizedBox(height: 15.h),
-                CustomTextField(hint: "Password", isPassword: true),
-                SizedBox(height: 15.h),
-                CustomTextField(hint: "Confirm Password", isPassword: true),
-                SizedBox(height: 25.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 60.h,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                    ),
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(
-                        fontSize: 25.sp,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20.h),
+                formFields(),
+                SizedBox(height: 30.h),
                 orDivider(),
                 SizedBox(height: 60.h),
                 socialButton(
-                  "Sign in with Google",
+                  "Sign up with Google",
                   FontAwesomeIcons.google,
                   () {},
                 ),
                 SizedBox(height: 20.h),
                 socialButton(
-                  "Sign in with Facebook",
+                  "Sign up with Facebook",
                   FontAwesomeIcons.facebook,
                   () {},
                 ),
