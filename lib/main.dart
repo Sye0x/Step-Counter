@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:step_counter/const/constantcolors.dart';
 import 'package:step_counter/widget/mainscreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ScreenUtilInit(
+      designSize: Size(412, 915), // Pixel 7 resolution
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) => const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        scaffoldBackgroundColor: backgroundColor, // Global background color
-      ),
-      title: 'Flutter Demo',
+      title: 'Responsive Signup',
       debugShowCheckedModeBanner: false,
-      home: MainScreen(),
+      theme: ThemeData(scaffoldBackgroundColor: backgroundColor),
+      home: const MainScreen(),
     );
   }
 }
