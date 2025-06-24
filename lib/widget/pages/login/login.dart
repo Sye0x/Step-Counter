@@ -1,7 +1,10 @@
+import "package:firebase_auth/firebase_auth.dart";
+
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
 import "package:step_counter/const/constantcolors.dart";
+
 import "package:step_counter/widget/pages/signup/signup.dart";
 import "package:step_counter/widget/reuseable/input_field.dart";
 
@@ -13,7 +16,18 @@ class login extends StatefulWidget {
   State<StatefulWidget> createState() => _login();
 }
 
+// ignore: camel_case_types
 class _login extends State<login> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  Future signIn() async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+  }
+
   Widget header(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
@@ -45,9 +59,13 @@ class _login extends State<login> {
   Widget formFields() {
     return Column(
       children: [
-        CustomTextField(hint: "Email"),
+        CustomTextField(hint: "Email", controller: emailController),
         SizedBox(height: 15.h),
-        CustomTextField(hint: "Password", isPassword: true),
+        CustomTextField(
+          hint: "Password",
+          isPassword: true,
+          controller: passwordController,
+        ),
         SizedBox(height: 15.h),
         Row(
           children: [
@@ -62,7 +80,7 @@ class _login extends State<login> {
           width: double.infinity,
           height: 60.h,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () => signIn(),
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
               shape: RoundedRectangleBorder(
@@ -145,6 +163,13 @@ class _login extends State<login> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
