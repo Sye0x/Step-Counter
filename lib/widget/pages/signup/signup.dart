@@ -1,11 +1,58 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:step_counter/const/constantcolors.dart';
 import 'package:step_counter/widget/reuseable/input_field.dart';
 
-class Signup extends StatelessWidget {
-  const Signup({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _Signup();
+}
+
+class _Signup extends State<SignUp> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
+  Future signUp() async {
+    if (confirmPasswordController.text.trim() ==
+        passwordController.text.trim()) {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder:
+            (ctx) => AlertDialog(
+              title: Text("Password Do not match"),
+              content: Text("Re-enter Password"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                  },
+                  child: Text("Okay"),
+                ),
+              ],
+            ),
+      );
+      passwordController.clear();
+      confirmPasswordController.clear();
+    }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   Widget header(BuildContext context) {
     return Stack(
@@ -106,17 +153,26 @@ class Signup extends StatelessWidget {
         SizedBox(height: 15.h),
         CustomTextField(hint: "Username"),
         SizedBox(height: 15.h),
-        CustomTextField(hint: "Email"),
+        CustomTextField(hint: "Email", controller: emailController),
         SizedBox(height: 15.h),
-        CustomTextField(hint: "Password", isPassword: true),
+        CustomTextField(
+          hint: "Password",
+          isPassword: true,
+          controller: passwordController,
+        ),
         SizedBox(height: 15.h),
-        CustomTextField(hint: "Confirm Password", isPassword: true),
+        CustomTextField(
+          hint: "Confirm Password",
+          isPassword: true,
+          controller: confirmPasswordController,
+        ),
         SizedBox(height: 25.h),
+
         SizedBox(
           width: double.infinity,
           height: 60.h,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: signUp,
             style: ElevatedButton.styleFrom(
               backgroundColor: primaryColor,
               shape: RoundedRectangleBorder(
