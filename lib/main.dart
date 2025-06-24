@@ -1,9 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:step_counter/const/constantcolors.dart';
 import 'package:step_counter/widget/mainscreen.dart';
+import 'package:step_counter/firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     ScreenUtilInit(
       designSize: Size(412, 915), // Pixel 7 resolution
