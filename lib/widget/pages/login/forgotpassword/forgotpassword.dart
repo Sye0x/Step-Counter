@@ -1,3 +1,5 @@
+import "package:firebase_auth/firebase_auth.dart";
+import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:step_counter/const/constantcolors.dart";
@@ -11,6 +13,47 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPassword extends State<ForgotPassword> {
+  final emailController = TextEditingController();
+
+  Future sendLink() async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: emailController.text.trim(),
+      );
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            content: Text(
+              "Link Sent Sucessfully",
+              style: const TextStyle(color: Colors.black),
+            ),
+          );
+        },
+      );
+    } on FirebaseAuthException catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            content: Text(
+              e.message.toString(),
+              style: const TextStyle(color: Colors.black),
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,17 +92,20 @@ class _ForgotPassword extends State<ForgotPassword> {
               SizedBox(height: 10.h),
               Text(
                 "Enter your email Address below and we will"
-                "send you a verification code to help you reset the password",
+                "send you a verification Link to help you reset the password",
                 style: TextStyle(color: secondaryColor, fontSize: 14.sp),
               ),
               SizedBox(height: 40.h),
-              CustomTextField(hint: "Enter Your Email"),
+              CustomTextField(
+                hint: "Enter Your Email",
+                controller: emailController,
+              ),
               SizedBox(height: 30.h),
               SizedBox(
                 width: double.infinity,
                 height: 60.h,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: sendLink,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
@@ -67,7 +113,7 @@ class _ForgotPassword extends State<ForgotPassword> {
                     ),
                   ),
                   child: Text(
-                    "Send Code",
+                    "Send Link",
                     style: TextStyle(
                       fontSize: 25.sp,
                       color: Colors.white,
