@@ -1,10 +1,11 @@
-import "package:firebase_auth/firebase_auth.dart";
-import "package:firebase_core/firebase_core.dart";
-import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:step_counter/const/constantcolors.dart";
 import "package:step_counter/widget/reuseable/input_field.dart";
+import "package:firebase_auth/firebase_auth.dart";
+import "package:firebase_core/firebase_core.dart";
+import "package:flutter/material.dart";
 
+// now make email not go into spam somehow
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
 
