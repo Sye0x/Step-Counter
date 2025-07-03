@@ -69,13 +69,16 @@ class _login extends State<login> {
         SizedBox(height: 15.h),
         Row(
           children: [
-            Text(
-              "Forgot Password",
-              style: TextStyle(color: primaryColor, fontSize: 18.sp),
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                "Forgot Password",
+                style: TextStyle(color: primaryColor, fontSize: 18.sp),
+              ),
             ),
           ],
         ),
-        SizedBox(height: 50.h),
+        SizedBox(height: 30.h),
         SizedBox(
           width: double.infinity,
           height: 60.h,

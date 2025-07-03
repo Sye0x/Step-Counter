@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'Responsive Signup',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(scaffoldBackgroundColor: backgroundColor),
-      home: const ForgotPassword(),
+      home: const MainScreen(),
     );
   }
 }

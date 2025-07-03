@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,6 +17,9 @@ class _Signup extends State<SignUp> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final fullNameController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
 
   Future signUp() async {
     if (confirmPasswordController.text.trim() ==
@@ -24,6 +28,7 @@ class _Signup extends State<SignUp> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
+      addUserDetails();
     } else {
       showDialog(
         context: context,
@@ -46,11 +51,29 @@ class _Signup extends State<SignUp> {
     }
   }
 
+  Future addUserDetails() async {
+    await FirebaseFirestore.instance.collection("Users").add({
+      "fullname": fullNameController.text.trim(),
+      "firstname": firstNameController.text.trim(),
+      "lastname": lastNameController.text.trim(),
+      "email": emailController.text.trim(),
+    });
+    fullNameController.clear();
+    firstNameController.clear();
+    lastNameController.clear();
+    emailController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+  }
+
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+    fullNameController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
     super.dispose();
   }
 
@@ -88,7 +111,7 @@ class _Signup extends State<SignUp> {
         Expanded(
           child: Divider(
             color: const Color.fromARGB(197, 189, 189, 189),
-            thickness: 0.5,
+            thickness: 1.5,
             endIndent: 5.w,
           ),
         ),
@@ -103,7 +126,7 @@ class _Signup extends State<SignUp> {
         Expanded(
           child: Divider(
             color: const Color.fromARGB(197, 189, 189, 189),
-            thickness: 0.5,
+            thickness: 1.5,
             indent: 5.w,
           ),
         ),
@@ -149,9 +172,11 @@ class _Signup extends State<SignUp> {
   Widget formFields() {
     return Column(
       children: [
-        CustomTextField(hint: "Full Name"),
+        CustomTextField(hint: "Full Name", controller: fullNameController),
         SizedBox(height: 15.h),
-        CustomTextField(hint: "Username"),
+        CustomTextField(hint: "First Name", controller: firstNameController),
+        SizedBox(height: 15.h),
+        CustomTextField(hint: "Last Name", controller: lastNameController),
         SizedBox(height: 15.h),
         CustomTextField(hint: "Email", controller: emailController),
         SizedBox(height: 15.h),
@@ -207,7 +232,7 @@ class _Signup extends State<SignUp> {
                 formFields(),
                 SizedBox(height: 30.h),
                 orDivider(),
-                SizedBox(height: 60.h),
+                SizedBox(height: 40.h),
                 socialButton(
                   "Sign up with Google",
                   FontAwesomeIcons.google,
