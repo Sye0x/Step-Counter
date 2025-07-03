@@ -110,7 +110,7 @@ class _login extends State<login> {
         Expanded(
           child: Divider(
             color: const Color.fromARGB(144, 189, 189, 189),
-            thickness: 1,
+            thickness: 1.5,
             endIndent: 5.w,
           ),
         ),
@@ -125,7 +125,7 @@ class _login extends State<login> {
         Expanded(
           child: Divider(
             color: const Color.fromARGB(144, 189, 189, 189),
-            thickness: 1,
+            thickness: 1.5,
             indent: 5.w,
           ),
         ),

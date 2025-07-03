@@ -18,8 +18,7 @@ class _Signup extends State<SignUp> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final fullNameController = TextEditingController();
-  final firstNameController = TextEditingController();
-  final lastNameController = TextEditingController();
+  final userNameController = TextEditingController();
 
   Future signUp() async {
     if (confirmPasswordController.text.trim() ==
@@ -28,7 +27,16 @@ class _Signup extends State<SignUp> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-      addUserDetails();
+      // Add user details
+      await addUserDetails();
+
+      // Sign out immediately
+      await FirebaseAuth.instance.signOut();
+
+      // Go back or show login screen
+      setState(() {
+        Navigator.pop(context);
+      });
     } else {
       showDialog(
         context: context,
@@ -54,13 +62,13 @@ class _Signup extends State<SignUp> {
   Future addUserDetails() async {
     await FirebaseFirestore.instance.collection("Users").add({
       "fullname": fullNameController.text.trim(),
-      "firstname": firstNameController.text.trim(),
-      "lastname": lastNameController.text.trim(),
+      "username": userNameController.text.trim(),
+
       "email": emailController.text.trim(),
     });
     fullNameController.clear();
-    firstNameController.clear();
-    lastNameController.clear();
+    userNameController.clear();
+
     emailController.clear();
     passwordController.clear();
     confirmPasswordController.clear();
@@ -72,8 +80,8 @@ class _Signup extends State<SignUp> {
     passwordController.dispose();
     confirmPasswordController.dispose();
     fullNameController.dispose();
-    firstNameController.dispose();
-    lastNameController.dispose();
+    userNameController.dispose();
+
     super.dispose();
   }
 
@@ -174,9 +182,8 @@ class _Signup extends State<SignUp> {
       children: [
         CustomTextField(hint: "Full Name", controller: fullNameController),
         SizedBox(height: 15.h),
-        CustomTextField(hint: "First Name", controller: firstNameController),
-        SizedBox(height: 15.h),
-        CustomTextField(hint: "Last Name", controller: lastNameController),
+        CustomTextField(hint: "Username", controller: userNameController),
+
         SizedBox(height: 15.h),
         CustomTextField(hint: "Email", controller: emailController),
         SizedBox(height: 15.h),
