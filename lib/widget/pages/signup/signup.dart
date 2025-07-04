@@ -23,20 +23,23 @@ class _Signup extends State<SignUp> {
   Future signUp() async {
     if (confirmPasswordController.text.trim() ==
         passwordController.text.trim()) {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-      // Add user details
-      await addUserDetails();
+      // Register user and get credentials
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          );
 
-      // Sign out immediately
+      // Add user details using UID from credentials
+      await addUserDetails(userCredential.user!.uid);
+
+      // Sign out
       await FirebaseAuth.instance.signOut();
 
-      // Go back or show login screen
-      setState(() {
+      // Navigate back to login or previous screen
+      if (mounted) {
         Navigator.pop(context);
-      });
+      }
     } else {
       showDialog(
         context: context,
@@ -59,16 +62,16 @@ class _Signup extends State<SignUp> {
     }
   }
 
-  Future addUserDetails() async {
-    await FirebaseFirestore.instance.collection("Users").add({
+  Future addUserDetails(String uid) async {
+    await FirebaseFirestore.instance.collection("Users").doc(uid).set({
+      "uid": uid,
       "fullname": fullNameController.text.trim(),
       "username": userNameController.text.trim(),
-
       "email": emailController.text.trim(),
     });
+
     fullNameController.clear();
     userNameController.clear();
-
     emailController.clear();
     passwordController.clear();
     confirmPasswordController.clear();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:step_counter/const/constantcolors.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -28,12 +29,15 @@ class _CustomTextFieldState extends State<CustomTextField> {
       controller: widget.controller,
       obscureText: widget.isPassword ? _obscure : false,
       keyboardType: widget.keyboardType,
-      style: TextStyle(color: primaryColor, fontSize: 18),
+      style: TextStyle(color: primaryColor, fontSize: 18.sp),
       decoration: InputDecoration(
         hintText: widget.hint,
-        hintStyle: TextStyle(color: secondaryColor, fontSize: 18),
+
+        hintStyle: TextStyle(color: secondaryColor, fontSize: 18.sp),
         filled: true,
         fillColor: cardBackgroundColor,
+        contentPadding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 12.w),
+
         border: OutlineInputBorder(),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
