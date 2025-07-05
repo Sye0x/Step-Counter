@@ -1,58 +1,55 @@
-import "package:cloud_firestore/cloud_firestore.dart";
-import "package:firebase_auth/firebase_auth.dart";
-import "package:flutter/material.dart";
-import "package:google_sign_in/google_sign_in.dart";
-import "package:step_counter/controller/getusername.dart";
-import "package:step_counter/widget/pages/login/login.dart";
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:step_counter/controller/getusername.dart';
+import 'package:step_counter/widget/pages/mainpage/mainpagelogic.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
   @override
-  State<StatefulWidget> createState() => _MainPage();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPage extends State<MainPage> {
-  final user = FirebaseAuth.instance.currentUser?.email;
-
+class _MainPageState extends State<MainPage> {
+  late MainController controller;
   List<String> docIDs = [];
 
-  Future getDocId() async {
-    await FirebaseFirestore.instance.collection("Users").get().then((snapshot) {
-      for (var doc in snapshot.docs) {
-        docIDs.add(doc.reference.id);
-      }
+  @override
+  void initState() {
+    super.initState();
+    controller = MainController(context: context);
+    fetchDocIds();
+  }
+
+  Future<void> fetchDocIds() async {
+    final ids = await controller.getDocIds();
+    setState(() {
+      docIDs = ids;
     });
   }
 
   @override
-  void initState() {
-    getDocId();
-    super.initState();
-  }
-
-  Future<void> signOut() async {
-    // Sign out from Firebase Auth
-    await FirebaseAuth.instance.signOut();
-
-    // Sign out from Google Sign-In to clear cached account
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn.signOut();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GetUsername(userId: FirebaseAuth.instance.currentUser!.uid),
-              ElevatedButton(onPressed: signOut, child: Text("Log Out")),
-            ],
-          ),
+          child:
+              userId == null
+                  ? const Text("No user logged in.")
+                  : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GetUsername(userId: userId),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: controller.signOut,
+                        child: const Text("Log Out"),
+                      ),
+                    ],
+                  ),
         ),
       ),
     );
