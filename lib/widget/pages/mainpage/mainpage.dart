@@ -32,26 +32,12 @@ class _MainPage extends State<MainPage> {
   }
 
   Future<void> signOut() async {
-    try {
-      // Sign out from Firebase Auth
-      await FirebaseAuth.instance.signOut();
+    // Sign out from Firebase Auth
+    await FirebaseAuth.instance.signOut();
 
-      // Sign out from Google Sign-In to clear cached account
-      final GoogleSignIn googleSignIn = GoogleSignIn();
-      await googleSignIn.signOut();
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Signed out successfully')),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign out failed: ${e.toString()}')),
-        );
-      }
-    }
+    // Sign out from Google Sign-In to clear cached account
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
   }
 
   @override

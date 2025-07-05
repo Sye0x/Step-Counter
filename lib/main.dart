@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:step_counter/const/constantcolors.dart';
 import 'package:step_counter/widget/mainscreen.dart';
 import 'package:step_counter/firebase_options.dart';
-import 'package:step_counter/widget/pages/login/forgotpassword/forgotpassword.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

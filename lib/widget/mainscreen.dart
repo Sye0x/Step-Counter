@@ -21,7 +21,7 @@ class _MainScreen extends State<MainScreen> {
           if (snapshot.hasData) {
             return MainPage();
           } else {
-            return login();
+            return Login();
           }
         },
       ),

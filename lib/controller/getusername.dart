@@ -11,28 +11,26 @@ class GetUsername extends StatelessWidget {
   Widget build(BuildContext context) {
     CollectionReference users = FirebaseFirestore.instance.collection("Users");
 
-    // Query Firestore for documents where 'uid' == userId
-    Future<QuerySnapshot> userQuery =
-        users.where('uid', isEqualTo: userId).get();
+    // Use the document directly by UID for efficiency and clarity
+    final userDoc = users.doc(userId).get();
 
-    return FutureBuilder<QuerySnapshot>(
-      future: userQuery,
+    return FutureBuilder<DocumentSnapshot>(
+      future: userDoc,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
-        } else if (snapshot.hasData) {
-          final docs = snapshot.data!.docs;
-
-          // If you expect only one user document per uid, take the first
-          final userData = docs.first.data() as Map<String, dynamic>;
+        } else if (snapshot.hasError) {
+          return const Text("Error loading user");
+        } else if (!snapshot.hasData || !snapshot.data!.exists) {
+          return const Text("User not found");
+        } else {
+          final userData = snapshot.data!.data() as Map<String, dynamic>;
           final username = userData['username'] ?? 'No username';
 
           return Text(
             'Hello $username',
             style: TextStyle(color: Colors.white, fontSize: 20.sp),
           );
-        } else {
-          return const Text('No data available');
         }
       },
     );
