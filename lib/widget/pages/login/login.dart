@@ -1,8 +1,10 @@
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_auth/firebase_auth.dart";
 
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:font_awesome_flutter/font_awesome_flutter.dart";
+import "package:google_sign_in/google_sign_in.dart";
 import "package:step_counter/const/constantcolors.dart";
 
 import "package:step_counter/widget/pages/signup/signup.dart";
@@ -26,6 +28,79 @@ class _login extends State<login> {
       email: emailController.text.trim(),
       password: passwordController.text.trim(),
     );
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      // Initialize Google Sign-In
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+
+      // Trigger the authentication flow
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        // User canceled the sign-in
+        return;
+      }
+
+      final email = googleUser.email;
+
+      // 🔍 Check if the user is already registered in Firestore
+      final QuerySnapshot result =
+          await FirebaseFirestore.instance
+              .collection('Users')
+              .where('email', isEqualTo: email)
+              .limit(1)
+              .get();
+
+      if (result.docs.isEmpty) {
+        // ❌ Not registered
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('You are not registered. Please sign up first.'),
+            ),
+          );
+        }
+        // Sign out the Google account immediately
+        await googleSignIn.signOut();
+        return;
+      }
+
+      // ✅ Proceed with authentication
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithCredential(credential);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Welcome ${userCredential.user?.displayName ?? 'User'}!',
+            ),
+          ),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Firebase Auth Error: ${e.message}')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Google Sign-In failed: ${e.toString()}')),
+        );
+      }
+    }
   }
 
   Widget header(BuildContext context) {
@@ -216,7 +291,7 @@ class _login extends State<login> {
                 socialButton(
                   "Sign in with Google",
                   FontAwesomeIcons.google,
-                  () {},
+                  signInWithGoogle,
                 ),
                 SizedBox(height: 20.h),
                 socialButton(
