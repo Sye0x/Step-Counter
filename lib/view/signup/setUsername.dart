@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:step_counter/const/constantcolors.dart';
-import 'package:step_counter/widget/reuseable/input_field.dart';
+import 'package:step_counter/view/reuseable/input_field.dart';
+import 'package:step_counter/controller/set_username_controller.dart';
 
-class Setusername extends StatefulWidget {
-  const Setusername({super.key});
+class SetUsernameView extends StatefulWidget {
+  const SetUsernameView({super.key});
 
   @override
-  State<Setusername> createState() => _Setusername();
+  State<SetUsernameView> createState() => _SetUsernameViewState();
 }
 
-class _Setusername extends State<Setusername> {
-  final TextEditingController userNameController = TextEditingController();
+class _SetUsernameViewState extends State<SetUsernameView> {
+  late SetUsernameController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = SetUsernameController(context);
+  }
 
   @override
   void dispose() {
-    userNameController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -27,10 +34,9 @@ class _Setusername extends State<Setusername> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: SingleChildScrollView(
-            // 👈 This is the key fix
             child: Column(
               children: [
-                SizedBox(height: 100.h), // Gives spacing from top
+                SizedBox(height: 100.h),
                 Text(
                   "Create your username",
                   style: TextStyle(
@@ -40,13 +46,12 @@ class _Setusername extends State<Setusername> {
                   ),
                 ),
                 SizedBox(height: 30.h),
-
                 Row(
                   children: [
                     Expanded(
                       child: CustomTextField(
                         hint: "Enter username",
-                        controller: userNameController,
+                        controller: _controller.userNameController,
                       ),
                     ),
                     SizedBox(width: 8.w),
@@ -58,19 +63,11 @@ class _Setusername extends State<Setusername> {
                         borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: IconButton(
-                        icon: Icon(Icons.arrow_forward, color: Colors.white),
-                        onPressed: () {
-                          final username = userNameController.text.trim();
-                          if (username.isNotEmpty) {
-                            Navigator.pop(context, username);
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Please enter a username"),
-                              ),
-                            );
-                          }
-                        },
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                        ),
+                        onPressed: _controller.submitUsername,
                       ),
                     ),
                   ],

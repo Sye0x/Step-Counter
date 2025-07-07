@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:step_counter/const/constantcolors.dart';
 
-import 'package:step_counter/widget/reuseable/input_field.dart';
-import 'package:step_counter/widget/pages/signup/signUpLogic.dart';
+import 'package:step_counter/view/reuseable/input_field.dart';
+import 'package:step_counter/controller/signUpLogic.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});

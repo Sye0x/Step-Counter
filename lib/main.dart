@@ -2,8 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:step_counter/const/constantcolors.dart';
-import 'package:step_counter/widget/mainscreen.dart';
+import 'package:step_counter/controller/mainscreen.dart';
 import 'package:step_counter/firebase_options.dart';
+import 'package:step_counter/view/signup/setUsername.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(scaffoldBackgroundColor: backgroundColor),
       home: const MainScreen(),
+      routes: {
+        '/setusername': (context) => const SetUsernameView(),
+        // add more routes here as needed
+      },
     );
   }
 }

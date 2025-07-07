@@ -1,11 +1,9 @@
-import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:step_counter/const/constantcolors.dart";
-import "package:step_counter/widget/reuseable/input_field.dart";
-import "package:firebase_auth/firebase_auth.dart";
-import "package:firebase_core/firebase_core.dart";
-import "package:flutter/material.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:step_counter/const/constantcolors.dart';
+import 'package:step_counter/controller/forgot_password_controller.dart';
+import 'package:step_counter/view/reuseable/input_field.dart';
 
-// now make email not go into spam somehow
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
 
@@ -14,44 +12,11 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPassword extends State<ForgotPassword> {
-  final emailController = TextEditingController();
-
-  Future sendLink() async {
-    try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(
-        email: emailController.text.trim(),
-      );
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            content: Text(
-              "Link Sent Sucessfully",
-              style: const TextStyle(color: Colors.black),
-            ),
-          );
-        },
-      );
-    } on FirebaseAuthException catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.white,
-            content: Text(
-              e.message.toString(),
-              style: const TextStyle(color: Colors.black),
-            ),
-          );
-        },
-      );
-    }
-  }
+  final controller = ForgotPasswordController();
 
   @override
   void dispose() {
-    emailController.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -66,9 +31,7 @@ class _ForgotPassword extends State<ForgotPassword> {
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Optional: back functionality
-                    },
+                    onPressed: () => Navigator.pop(context),
                     icon: Icon(Icons.arrow_back),
                     iconSize: 30.sp,
                   ),
@@ -77,36 +40,33 @@ class _ForgotPassword extends State<ForgotPassword> {
               SizedBox(height: 50.h),
               Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: Text(
-                      "Forgot Password?",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 35.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    "Forgot Password?",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 35.sp,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
               SizedBox(height: 10.h),
               Text(
-                "Enter your email Address below and we will"
-                "send you a verification Link to help you reset the password",
+                "Enter your email address below and we will "
+                "send you a verification link to help you reset the password.",
                 style: TextStyle(color: secondaryColor, fontSize: 14.sp),
               ),
               SizedBox(height: 40.h),
               CustomTextField(
                 hint: "Enter Your Email",
-                controller: emailController,
+                controller: controller.emailController,
               ),
               SizedBox(height: 30.h),
               SizedBox(
                 width: double.infinity,
                 height: 60.h,
                 child: ElevatedButton(
-                  onPressed: sendLink,
+                  onPressed: () => controller.sendLink(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
